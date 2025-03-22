@@ -511,6 +511,31 @@ export default function MusicPlayer() {
 
   return (
     <div className="flex flex-col w-full max-w-md mx-auto bg-[#e6e6e6] rounded-lg overflow-hidden shadow-xl border border-gray-300">
+      {/* Mobile horizontal volume slider - only shows on small screens */}
+      <div className="sm:hidden p-3 pt-2 pb-2 bg-[#f5f5f5] flex items-center space-x-3 border-b border-gray-300">
+        <div className="flex-1 px-1">
+          <Slider
+            orientation="horizontal"
+            value={[isMuted ? 0 : volume]}
+            max={100}
+            step={10}
+            onValueChange={handleVolumeChange}
+            className="w-full"
+          />
+        </div>
+        <button
+          onClick={() => setIsMuted(!isMuted)}
+          className="flex-shrink-0 relative flex items-center justify-center h-8 w-14 bg-[#f0f0f0] rounded-lg shadow-md hover:shadow-lg transition-all active:translate-y-0.5 border border-gray-300"
+        >
+          <div className="absolute inset-x-2 inset-y-1 bg-gradient-to-b from-[#ff6b00] to-[#cc5500] rounded-full shadow-[inset_0_1px_1px_rgba(0,0,0,0.15),0_2px_2px_rgba(0,0,0,0.1)] flex items-center justify-center">
+            {isMuted || volume === 0 ? (
+              <VolumeX className="h-4 w-4 text-white" />
+            ) : (
+              <Volume2 className="h-4 w-4 text-white" />
+            )}
+          </div>
+        </button>
+      </div>
       {/* Top section with visualizer */}
       <div className="bg-[#1a1a1a] p-3 border-b border-gray-300">
         <canvas ref={canvasRef} width={400} height={120} className="w-full rounded-sm" />
@@ -638,26 +663,28 @@ export default function MusicPlayer() {
           </div>
         </div>
 
-        {/* Volume slider - vertical on the right */}
-        <div className="w-12 p-2 flex flex-col items-center bg-[#f5f5f5] border-l border-gray-300">
+        {/* Volume slider - vertical on the right - hidden on mobile */}
+        <div className="hidden sm:flex min-w-[3.5rem] w-14 p-2 flex-col items-center bg-[#f5f5f5] border-l border-gray-300">
           <button
             onClick={() => setIsMuted(!isMuted)}
-            className="flex items-center justify-center w-8 h-8 mb-2 bg-white rounded-full shadow-sm hover:shadow-md transition-all active:translate-y-0.5 border border-gray-300"
+            className="relative flex items-center justify-center h-10 w-10 mb-3 bg-[#f0f0f0] rounded-lg shadow-md hover:shadow-lg transition-all active:translate-y-0.5 border border-gray-300"
           >
-            {isMuted || volume === 0 ? (
-              <VolumeX className="h-4 w-4 text-gray-700" />
-            ) : (
-              <Volume2 className="h-4 w-4 text-gray-700" />
-            )}
+            <div className="absolute inset-2 bg-gradient-to-b from-[#ff6b00] to-[#cc5500] rounded-full shadow-[inset_0_1px_1px_rgba(0,0,0,0.15),0_2px_2px_rgba(0,0,0,0.1)] flex items-center justify-center">
+              {isMuted || volume === 0 ? (
+                <VolumeX className="h-4 w-4 text-white" />
+              ) : (
+                <Volume2 className="h-4 w-4 text-white" />
+              )}
+            </div>
           </button>
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 w-full flex items-center justify-center px-2 sm:px-4">
             <Slider
               orientation="vertical"
               value={[isMuted ? 0 : volume]}
               max={100}
-              step={1}
+              step={10}
               onValueChange={handleVolumeChange}
-              className="h-full"
+              className="h-[calc(100%-1rem)]"
             />
           </div>
         </div>
